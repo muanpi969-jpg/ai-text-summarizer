@@ -1,4 +1,4 @@
 streamlit==1.33.0
 transformers==4.38.2
-torch
 sentencepiece
+torch --index-url https://download.pytorch.org/whl/cpu
