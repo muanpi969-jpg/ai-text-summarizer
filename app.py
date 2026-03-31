@@ -1,26 +1,50 @@
 import streamlit as st
-from summarizer import summarize_text
+from summarizer import summarize
+from utils import count_words, timed
 
-st.set_page_config(page_title="AI Text Summarizer", layout="centered")
+st.set_page_config(
+    page_title="Text Summarizer",
+    layout="centered"
+)
 
-st.title("📝 AI Text Summarizer")
-st.markdown("Summarize long articles using a Transformer-based model.")
+st.title("Text Summarization")
+st.caption("Abstractive summarization using transformer models")
 
-text_input = st.text_area("Enter your text below:", height=300)
+# Model selection (aligned with your CV)
+model_map = {
+    "BART (balanced)": "facebook/bart-large-cnn",
+    "T5 (lightweight)": "t5-small"
+}
 
-max_length = st.slider("Maximum Summary Length", 50, 300, 130)
-min_length = st.slider("Minimum Summary Length", 10, 100, 30)
+model_label = st.selectbox("Model", list(model_map.keys()))
+model_name = model_map[model_label]
 
-if st.button("Generate Summary"):
-    if text_input.strip() == "":
-        st.warning("Please enter some text to summarize.")
+# Input
+text = st.text_area("Input text", height=260)
+
+# Word count (raw input)
+if text:
+    st.markdown(f"**Input word count:** {count_words(text)}")
+
+# Controls
+max_len = st.slider("Max length", 50, 300, 130)
+min_len = st.slider("Min length", 10, 100, 30)
+
+# Run
+if st.button("Generate"):
+    if not text.strip():
+        st.warning("Input required.")
     else:
-        with st.spinner("Generating summary..."):
-            summary = summarize_text(
-                text_input,
-                max_length=max_length,
-                min_length=min_length
+        with st.spinner("Running model..."):
+            summary, latency = timed(
+                summarize,
+                text,
+                model_name,
+                max_len,
+                min_len
             )
-        st.success("Summary Generated!")
-        st.subheader("Summary:")
+
+        st.subheader("Summary")
         st.write(summary)
+
+        st.caption(f"Inference time: {latency}s")
