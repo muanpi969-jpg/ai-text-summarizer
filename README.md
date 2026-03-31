@@ -1,107 +1,93 @@
-🧠 Transformer-Based Abstractive Text Summarization System
+# Transformer-Based Text Summarization System
 
-🎓 Academic Positioning
-
-This project was developed to explore real-world applications of Transformer architectures in Natural Language Processing (NLP).
-
-As a prospective Computer Science student focusing on Artificial Intelligence and Machine Learning, I built this system to deepen my understanding of:
-	•	Encoder–decoder transformer models
-	•	Self-attention mechanisms
-	•	Tokenization and sequence length constraints
-	•	Inference pipeline optimization
-	•	Practical deployment of large language models
-
-Rather than only using pretrained models, I focused on understanding the architectural and computational trade-offs involved in transformer-based summarization.
+🔗 Live Demo: https://muanpi-ai-text-summarizer.streamlit.app/
 
 
+## Overview
 
-🔬 Technical Foundations
+This project implements an abstractive text summarization system using transformer-based encoder–decoder models.  
+It focuses on controlled inference, model comparison, and deployment of NLP systems in a real-world setting.
 
-1️⃣ Problem Type
-
-This project implements abstractive text summarization, which differs from extractive summarization by generating new sentences rather than copying segments from the original text.
-
-Abstractive summarization requires:
-	•	Context modeling
-	•	Long-range dependency tracking
-	•	Semantic compression
-
-These are achieved using transformer-based attention mechanisms.
+The goal was not only to use pretrained models, but to understand how architectural choices and decoding strategies affect summary quality, efficiency, and behavior.
 
 
+## Core Functionality
 
-2️⃣ Model Architecture
-
-The system evaluates three transformer models:
-	•	facebook/bart-large-cnn
-	•	t5-small
-	•	google/pegasus-xsum
-
-All are encoder-decoder architectures trained on large corpora.
-
-Core Concepts Applied:
-	•	Multi-head self-attention
-	•	Positional encoding
-	•	Sequence-to-sequence generation
-	•	Beam search inference
+- Abstractive summarization using transformer models  
+- Model switching between BART and T5  
+- Input word count tracking before summarization  
+- Adjustable output length (min/max tokens)  
+- Inference latency measurement  
+- Streamlit-based deployment for interactive use  
 
 
+## Model Selection
 
-⚙️ Engineering Design
+- **BART (facebook/bart-large-cnn)**  
+  Produces balanced summaries with stronger structural coherence.
 
-The project follows modular design principles:
-summarizer.py   → model loading + inference
-utils.py        → preprocessing
-app.py          → user interface layer
-Design decisions:
-	•	Model is loaded once to optimize runtime efficiency
-	•	Adjustable max/min token length
-	•	Clean preprocessing to reduce noise
-	•	Deterministic decoding (do_sample=False)
+- **T5 (t5-small)**  
+  Faster and lighter, but tends to generate simpler and shorter summaries.
 
-This reflects awareness of computational cost and inference performance.
+These differences reflect trade-offs between model size, inference speed, and abstraction level.
 
 
+## System Design
 
-📊 Model Comparison Insights
+The application follows a modular structure:
 
-During experimentation, I observed:
-	•	BART produced more coherent summaries for structured news content
-	•	T5-small was computationally lighter but less detailed
-	•	Pegasus performed well on concise inputs
+- `summarizer.py` → model loading and inference  
+- `utils.py` → preprocessing and timing utilities  
+- `app.py` → interface and user interaction  
 
-This highlights the trade-off between:
-	•	Model size
-	•	Inference speed
-	•	Output quality
+### Design Decisions
 
-Understanding these trade-offs is central to ML system design.
+- Cached model loading to avoid repeated initialization  
+- Deterministic decoding (`do_sample=False`) for stable outputs  
+- Lightweight preprocessing to normalize input text  
+- Explicit control over summary length  
+- Separation of UI and inference logic  
 
-
-
-🚧 Limitations & Critical Analysis
-	•	Token limit (~1024 tokens for BART)
-	•	No domain-specific fine-tuning
-	•	No quantitative evaluation metrics (e.g., ROUGE)
-	•	Pretrained model biases may affect summary framing
-
-Recognizing system limitations is essential in responsible AI development.
+These choices were made to balance performance, reproducibility, and clarity.
 
 
+## Observations
 
-📈 Future Extensions (AI/ML Direction)
+During testing:
 
-To further develop this into a research-oriented system:
-	•	Fine-tune model on domain-specific dataset
-	•	Implement ROUGE evaluation metrics
-	•	Compare greedy decoding vs beam search
-	•	Add multilingual transformer models
-	•	Convert into REST API for scalable deployment
+- BART produced more coherent summaries for structured inputs  
+- T5 was significantly faster but less detailed  
+- Output quality depends heavily on decoding configuration and input length  
 
+This highlights the importance of aligning model choice with application constraints.
 
 
-📚 Personal Learning Reflection
+## Limitations
 
-Building this project strengthened my understanding of how transformer architectures operate beyond theoretical explanations. I encountered environment compatibility issues, token length constraints, and model loading inefficiencies, which required debugging and system-level thinking.
+- Transformer token limits restrict very long inputs  
+- No fine-tuning on domain-specific datasets  
+- Summaries can be partially extractive depending on model behavior  
+- No quantitative evaluation metrics (e.g., ROUGE) implemented  
 
-This experience reinforced my interest in pursuing Computer Science with a focus on Artificial Intelligence and Machine Learning.
+
+## Future Work
+
+- Implement ROUGE-based evaluation  
+- Add long-text chunking for extended inputs  
+- Compare decoding strategies (greedy vs sampling)  
+- Extend to additional transformer models  
+- Expose as an API for scalable usage  
+
+
+## Technical Stack
+
+- Python  
+- Streamlit  
+- Hugging Face Transformers  
+- PyTorch  
+
+
+## Notes
+
+This project involved debugging deployment environments, managing dependency compatibility, and handling runtime constraints.  
+It reflects an applied understanding of how modern NLP systems behave outside of controlled environments.
